@@ -1,7 +1,8 @@
 export default function({ types: t }) {
   return {
     visitor: {
-      ArrowFunctionExpression(path, state) {
+      // replace simple arrow functions
+      ArrowFunctionExpression(path) {
         const newFunction = t.classMethod(
           "method",
           t.identifier(path.parent.key.name),
@@ -10,7 +11,10 @@ export default function({ types: t }) {
         );
 
         path.parentPath.replaceWith(newFunction);
-      }
+      },
+
+      // replace function which returns an object
+      ArrowFunctionExpression(path) {}
     }
   };
 }
